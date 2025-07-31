@@ -19,4 +19,18 @@ class Usuario
         $smtm->execute([$id]);
         return $smtm->fetchAll(\PDO::FETCH_ASSOC);
     }
+
+    public static function cria($nome, $email)
+    {
+        global $conn;
+        $stmt = $conn->prepare("INSERT INTO usuarios (nome, email) VALUES (?, ?)");
+        $result = $stmt->execute([$nome, $email]);
+
+        if ($result) {
+            return ['mensagem' => 'Usuário criado com sucesso'];
+        } else {
+            http_response_code(500);
+            return ['mensagem' => 'Erro ao criar o usuário'];
+        }
+    }
 }

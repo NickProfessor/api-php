@@ -16,3 +16,9 @@ function pegarUsuario($id)
     $usuario = Usuario::especifico($id);
     echo json_encode($usuario);
 }
+
+function criarUsuario($nome, $email)
+{
+    $resposta = Usuario::cria($nome, $email);
+    echo json_encode($resposta);
+}

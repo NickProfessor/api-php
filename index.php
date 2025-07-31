@@ -1,25 +1,30 @@
 <?php
 
+use function Routes\Controllers\criarUsuario;
 use function Routes\Controllers\listarUsuarios;
 use function Routes\Controllers\pegarUsuario;
 
 $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-
 $partes = explode('/', $uri);
 
 // Verifica se existe o id na URL
-if (isset($partes[2]) && is_numeric($partes[2])) {
-    $id = (int) $partes[2];
-} else {
-    $id = null;
-}
+$id = isset($partes[2]) && is_numeric($partes[2]) ? (int) $partes[2] : null;
 
-if ($partes[1] == 'usuarios' && $_SERVER['REQUEST_METHOD'] === 'GET' && $id !== null) {
-    require_once __DIR__ . '/controllers/UsuarioController.php';
+require_once __DIR__ . '/controllers/UsuarioController.php';
+
+if ($partes[1] === 'usuarios' && $_SERVER['REQUEST_METHOD'] === 'GET' && $id !== null) {
     pegarUsuario($id);
-} elseif ($partes[1] == 'usuarios' && $_SERVER['REQUEST_METHOD'] === 'GET') {
-    require_once __DIR__ . '/controllers/UsuarioController.php';
+} elseif ($partes[1] === 'usuarios' && $_SERVER['REQUEST_METHOD'] === 'GET') {
     listarUsuarios();
+} elseif ($partes[1] === 'usuarios' && isset($partes[2]) && $partes[2] === 'criar' && $_SERVER['REQUEST_METHOD'] === 'POST') {
+    $dados = json_decode(file_get_contents("php://input"), true);
+
+    if (isset($dados['nome'], $dados['email'])) {
+        criarUsuario($dados['nome'], $dados['email']);
+    } else {
+        http_response_code(400);
+        echo json_encode(['erro' => 'Nome e email são obrigatórios']);
+    }
 } else {
     http_response_code(404);
     echo json_encode(['erro' => 'Rota não encontrada']);
