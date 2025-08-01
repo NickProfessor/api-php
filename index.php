@@ -1,5 +1,6 @@
 <?php
 
+use function Routes\Controllers\atualizarUsuario;
 use function Routes\Controllers\criarUsuario;
 use function Routes\Controllers\listarUsuarios;
 use function Routes\Controllers\pegarUsuario;
@@ -24,6 +25,15 @@ if ($partes[1] === 'usuarios' && $_SERVER['REQUEST_METHOD'] === 'GET' && $id !==
     } else {
         http_response_code(400);
         echo json_encode(['erro' => 'Nome e email são obrigatórios']);
+    }
+} elseif ($partes[1] === 'usuarios' && isset($partes[3]) && $partes[3] === 'atualizar' && $_SERVER['REQUEST_METHOD'] === 'PUT') {
+    $dados = json_decode(file_get_contents('php://input'), true);
+    if ((isset($id) && $id != '') && isset($dados['nome']) || isset($dados['email'])) {
+        atualizarUsuario($id, $dados['nome'], $dados['email']);
+    } else {
+        http_response_code(400);
+        echo json_encode(['erro' => 'Dados insuficientes']);
+
     }
 } else {
     http_response_code(404);

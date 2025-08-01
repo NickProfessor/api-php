@@ -27,10 +27,26 @@ class Usuario
         $result = $stmt->execute([$nome, $email]);
 
         if ($result) {
+            http_response_code(201);
             return ['mensagem' => 'Usuário criado com sucesso'];
         } else {
             http_response_code(500);
             return ['mensagem' => 'Erro ao criar o usuário'];
+        }
+    }
+
+    public static function atualiza($id, $nome, $email)
+    {
+        global $conn;
+        $stmt = $conn->prepare("UPDATE usuarios SET nome = ?, email =?  WHERE id = ?");
+        $result = $stmt->execute([$nome, $email, $id]);
+
+        if ($result) {
+            http_response_code(200);
+            return ['mensagem' => 'Usuário atualizado com sucesso'];
+        } else {
+            http_response_code(500);
+            return ['mensagem' => 'Erro ao atualizar dados do usuário'];
         }
     }
 }

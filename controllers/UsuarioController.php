@@ -22,3 +22,9 @@ function criarUsuario($nome, $email)
     $resposta = Usuario::cria($nome, $email);
     echo json_encode($resposta);
 }
+
+function atualizarUsuario($id, $nome, $email)
+{
+    $resposta = Usuario::atualiza($id, $nome, $email);
+    echo json_encode($resposta);
+}
