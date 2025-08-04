@@ -49,4 +49,28 @@ class Usuario
             return ['mensagem' => 'Erro ao atualizar dados do usuário'];
         }
     }
+
+    public static function deleta($id)
+    {
+        global $conn;
+
+        $check = $conn->prepare("SELECT id FROM usuarios WHERE id = ?");
+        $check->execute([$id]);
+        if ($check->rowCount() === 0) {
+            http_response_code(404);
+            return ['mensagem' => 'Usuário não encontrado'];
+        }
+
+        $stmt = $conn->prepare("DELETE FROM usuarios WHERE id = ?");
+        $result = $stmt->execute([$id]);
+
+        if ($result) {
+            http_response_code(200);
+            return ['mensagem' => 'Usuário removido com sucesso'];
+        } else {
+            http_response_code(500);
+            return ['mensagem' => 'Erro ao remover usuário'];
+        }
+    }
+
 }

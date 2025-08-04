@@ -14,7 +14,12 @@ function listarUsuarios()
 function pegarUsuario($id)
 {
     $usuario = Usuario::especifico($id);
-    echo json_encode($usuario);
+    if (!empty($usuario)) {
+        echo json_encode($usuario);
+    } else {
+        http_response_code(404);
+        echo json_encode(['mensagem' => 'Nenhum usuário encontrado']);
+    }
 }
 
 function criarUsuario($nome, $email)
@@ -26,5 +31,11 @@ function criarUsuario($nome, $email)
 function atualizarUsuario($id, $nome, $email)
 {
     $resposta = Usuario::atualiza($id, $nome, $email);
+    echo json_encode($resposta);
+}
+
+function deletarUsuario($id)
+{
+    $resposta = Usuario::deleta($id);
     echo json_encode($resposta);
 }

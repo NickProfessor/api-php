@@ -2,6 +2,7 @@
 
 use function Routes\Controllers\atualizarUsuario;
 use function Routes\Controllers\criarUsuario;
+use function Routes\Controllers\deletarUsuario;
 use function Routes\Controllers\listarUsuarios;
 use function Routes\Controllers\pegarUsuario;
 
@@ -30,6 +31,14 @@ if ($partes[1] === 'usuarios' && $_SERVER['REQUEST_METHOD'] === 'GET' && $id !==
     $dados = json_decode(file_get_contents('php://input'), true);
     if ((isset($id) && $id != '') && isset($dados['nome']) || isset($dados['email'])) {
         atualizarUsuario($id, $dados['nome'], $dados['email']);
+    } else {
+        http_response_code(400);
+        echo json_encode(['erro' => 'Dados insuficientes']);
+
+    }
+} elseif ($partes[1] === 'usuarios' && $_SERVER['REQUEST_METHOD'] === 'DELETE') {
+    if ((isset($id) && $id != '')) {
+        deletarUsuario($id);
     } else {
         http_response_code(400);
         echo json_encode(['erro' => 'Dados insuficientes']);
