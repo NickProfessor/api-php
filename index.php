@@ -18,7 +18,7 @@ if ($partes[1] === 'usuarios' && $_SERVER['REQUEST_METHOD'] === 'GET' && $id !==
     pegarUsuario($id);
 } elseif ($partes[1] === 'usuarios' && $_SERVER['REQUEST_METHOD'] === 'GET') {
     listarUsuarios();
-} elseif ($partes[1] === 'usuarios' && isset($partes[2]) && $partes[2] === 'criar' && $_SERVER['REQUEST_METHOD'] === 'POST') {
+} elseif ($partes[1] === 'usuarios' && $_SERVER['REQUEST_METHOD'] === 'POST') {
     $dados = json_decode(file_get_contents("php://input"), true);
 
     if (isset($dados['nome'], $dados['email'])) {
